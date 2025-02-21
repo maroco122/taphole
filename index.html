@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>탭 가공 기초 홀 계산기</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, select, button { padding: 10px; margin: 10px; font-size: 16px; }
+        #result { font-size: 18px; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h2>🔩 탭 가공 기초 홀 계산기</h2>
+    <label for="tapSize">탭 사이즈 (M): </label>
+    <input type="number" id="tapSize" placeholder="예: 30" min="1" max="100">
+    <button onclick="calculateDrillSize()">계산하기</button>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateDrillSize() {
+            const tapSize = parseFloat(document.getElementById("tapSize").value);
+            
+            if (isNaN(tapSize) || tapSize < 1) {
+                document.getElementById("result").innerHTML = "❌ 올바른 값을 입력하세요!";
+                return;
+            }
+
+            // ISO 표준 피치 값 (일반 나사 기준, M30 포함)
+            const pitchValues = {
+                1: 0.25, 2: 0.4, 3: 0.5, 4: 0.7, 5: 0.8, 6: 1.0, 
+                8: 1.25, 10: 1.5, 12: 1.75, 16: 2.0, 20: 2.5, 
+                24: 3.0, 30: 3.5, 36: 4.0, 42: 4.5, 48: 5.0, 56: 5.5
+            };
+
+            // 기본 피치값 설정 (기본값: 1.5mm)
+            const pitch = pitchValues[tapSize] || 1.5;
+            const drillSize = tapSize - pitch; // 기초 홀 계산식 적용
+
+            document.getElementById("result").innerHTML = 
+                `✅ 추천 기초 홀 직경: <strong>${drillSize.toFixed(1)} mm</strong>`;
+
+            // 5초 후 네이버 스마트스토어 이동
+            setTimeout(() => {
+                window.location.href = "https://smartstore.naver.com/allgagu";
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
