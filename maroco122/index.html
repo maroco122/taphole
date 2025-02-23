@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>탭핑유 및 기초홀 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        select, input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>탭핑유 및 기초홀 계산기</h2>
+        <label for="material">소재 선택:</label>
+        <select id="material">
+            <option value="steel">탄소강 (일반 철, SS400, S45C)</option>
+            <option value="stainless">스테인리스강 (STS304, STS316)</option>
+            <option value="aluminum">알루미늄 & 합금</option>
+            <option value="brass">황동 & 구리</option>
+            <option value="cast_iron">주철 (FC250, FCD500)</option>
+            <option value="titanium">티타늄 & 고경도 합금</option>
+        </select>
+        
+        <label for="tap_size">탭 규격 (M 사이즈):</label>
+        <input type="number" id="tap_size" placeholder="예: 20">
+        
+        <button onclick="calculateTapping()">계산하기</button>
+        
+        <div class="result" id="output"></div>
+    </div>
+    
+    <script>
+        function calculateTapping() {
+            const material = document.getElementById("material").value;
+            const tapSize = parseFloat(document.getElementById("tap_size").value);
+            
+            if (isNaN(tapSize) || tapSize <= 0) {
+                alert("올바른 탭 사이즈를 입력하세요.");
+                return;
+            }
+            
+            const pitch = tapSize >= 20 ? 2.5 : tapSize >= 10 ? 1.5 : 1.0; 
+            const finalHole = tapSize - pitch;
+            
+            let drillSequence = [3, 8, 12, finalHole].filter(d => d < finalHole);
+            drillSequence.push(finalHole);
+            
+            const tappingOil = {
+                "steel": "황/염소계 탭핑유 (강한 윤활 필요)",
+                "stainless": "고점도 황/염소계 오일 (스테인리스 전용)",
+                "aluminum": "저점도 오일 or 수용성 절삭유 (칩 부착 방지)",
+                "brass": "경량 오일 or 수용성 절삭유 (산화 방지)",
+                "cast_iron": "수용성 절삭유 or 건식 가공 (주철 특성 고려)",
+                "titanium": "고급 합성 윤활유 (E.P. 첨가제 포함)"
+            };
+            
+            const output = `
+                <h3>결과</h3>
+                <p><strong>추천 탭핑유:</strong> ${tappingOil[material]}</p>
+                <p><strong>기초홀 드릴링 순서:</strong> ${drillSequence.join(" → ")} mm</p>
+            `;
+            
+            document.getElementById("output").innerHTML = output;
+        }
+    </script>
+</body>
+</html>
